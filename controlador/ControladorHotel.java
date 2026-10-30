@@ -1,44 +1,84 @@
 package controlador;
 
-import java.awt.TextField;
+import modelo.Huesped;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
-import modelo.RegistroHotel;
 
 public class ControladorHotel {
-    private final ArrayList<RegistroHotel> listaRegistro = new ArrayList<>();
+    
+    private ArrayList<Huesped> listaHuespedes = new ArrayList<>();
 
-    public void agregarRegistro(String codigo, String nombre, String tipoHabitacion, String numeroHabitacion, String diasHospedaje, DefaultTableModel modeloTabla){
-        RegistroHotel registro = new RegistroHotel(codigo, nombre, tipoHabitacion, Integer.parseInt(numeroHabitacion), Integer.parseInt(diasHospedaje));
-        listaRegistro.add(registro);
-        modeloTabla.addRow(new Object[]{codigo, nombre, tipoHabitacion, numeroHabitacion, diasHospedaje});
-    } 
-
-    public void consultarRegistro(int selectedRow, DefaultTableModel modeloTabla, TextField txtCodigo, TextField txtNombre, TextField txtTipoHabitacion, TextField txtNumeroHabitacion, TextField txtDiasHospedaje){
-        txtCodigo.setText(modeloTabla.getValueAt(selectedRow, 0).toString());
-        txtNombre.setText(modeloTabla.getValueAt(selectedRow, 1).toString());
-        txtTipoHabitacion.setText(modeloTabla.getValueAt(selectedRow, 2).toString());
-        txtNumeroHabitacion.setText(modeloTabla.getValueAt(selectedRow, 3).toString());
-        txtDiasHospedaje.setText(modeloTabla.getValueAt(selectedRow, 4).toString());
+    // NUEVO MÉTODO: Define los precios de cada tipo de habitación
+    public double obtenerTarifa(String tipoHabitacion) {
+        switch (tipoHabitacion) {
+            case "Básica": return 45000.0;
+            case "Suite": return 80000.0;
+            case "Suite Presidencial": return 150000.0;
+            default: return 45000.0;
+        }
     }
 
-    public void modificarRegistro(int selectedRow, String codigo, String nombre, String tipoHabitacion, String numeroHabitacion, String diasHospedaje, DefaultTableModel modeloTabla){
-        RegistroHotel registro = listaRegistro.get(selectedRow);
-        registro.setCodigo(codigo);
-        registro.setNombre(nombre);
-        registro.setTipoHabitacion(tipoHabitacion);
-        registro.setNumeroHabitacion(Integer.parseInt(numeroHabitacion));
-        registro.setDiasHospedaje(Integer.parseInt(diasHospedaje));
-
-        modeloTabla.setValueAt(codigo, selectedRow, 0);
-        modeloTabla.setValueAt(nombre, selectedRow, 1);
-        modeloTabla.setValueAt(tipoHabitacion, selectedRow, 2);
-        modeloTabla.setValueAt(numeroHabitacion, selectedRow, 3);
-        modeloTabla.setValueAt(diasHospedaje, selectedRow, 4);
+    public double calcularCostoTotal(int diasHospedaje, double tarifaPorDia) {
+        double costoTotal = diasHospedaje * tarifaPorDia;
+        return Math.round(costoTotal * 100.0) / 100.0;
     }
 
-    public void eliminarRegistro(DefaultTableModel modeloTabla, int selectedRow){
-        listaRegistro.remove(selectedRow);
-        modeloTabla.removeRow(selectedRow);
+    public String generarCodigoUnico() {
+        int randomNum = (int) (Math.random() * 10000); 
+        return "H-" + randomNum + "-" + System.currentTimeMillis(); 
+    }
+
+    // MODIFICADO: Ahora calcula el costo basado en el tipo de habitación
+    public void agregarRegistro(String nombre, String tipoHabitacion, String numHabitacion, int dias, DefaultTableModel modelo) {
+        String codigo = generarCodigoUnico();
+        
+        // Obtenemos la tarifa dinámica
+        double tarifa = obtenerTarifa(tipoHabitacion);
+        double costo = calcularCostoTotal(dias, tarifa);
+        
+        Huesped nuevoHuesped = new Huesped(codigo, nombre, tipoHabitacion, numHabitacion, dias, costo);
+        listaHuespedes.add(nuevoHuesped); 
+        
+        modelo.addRow(new Object[]{codigo, nombre, tipoHabitacion, numHabitacion, dias, costo});
+    }
+
+    // MODIFICADO: Recalcula el costo usando la tarifa correcta si se modifica
+    public void modificarRegistro(int fila, String codigo, String nombre, String tipoHabitacion, String numHabitacion, int dias, DefaultTableModel modelo) {
+        
+        double tarifa = obtenerTarifa(tipoHabitacion);
+        double nuevoCosto = calcularCostoTotal(dias, tarifa);
+        
+        if (fila >= 0 && fila < listaHuespedes.size()) {
+            Huesped actualizado = new Huesped(codigo, nombre, tipoHabitacion, numHabitacion, dias, nuevoCosto);
+            listaHuespedes.set(fila, actualizado); 
+        }
+        
+        modelo.setValueAt(codigo, fila, 0);
+        modelo.setValueAt(nombre, fila, 1);
+        modelo.setValueAt(tipoHabitacion, fila, 2);
+        modelo.setValueAt(numHabitacion, fila, 3);
+        modelo.setValueAt(dias, fila, 4);
+        modelo.setValueAt(nuevoCosto, fila, 5); 
+    }
+
+    public void eliminarRegistro(DefaultTableModel modelo, int fila) {
+        if (fila >= 0 && fila < listaHuespedes.size()) {
+            listaHuespedes.remove(fila); 
+            modelo.removeRow(fila);      
+        }
+    }
+
+    public Huesped buscarCliente(String criterio) {
+        Iterator<Huesped> iterador = listaHuespedes.iterator();
+        while (iterador.hasNext()) {
+            Huesped h = iterador.next();
+            if (h.getNombre().equalsIgnoreCase(criterio) || 
+                h.getNumeroHabitacion().equals(criterio) || 
+                h.getCodigo().equals(criterio)) {
+                return h;
+            }
+        }
+        return null; 
     }
 }
