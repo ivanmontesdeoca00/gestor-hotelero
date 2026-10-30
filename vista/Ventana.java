@@ -22,7 +22,7 @@ public class Ventana extends Frame {
 
     public Ventana() {
         setLayout(null);
-        // Aumenté el tamaño a 1000x480 para que quepa todo bien y no se corte
+    
         setSize(1000, 480); 
         setTitle("Registro Hotelero - MVC");
         setBackground(Color.LIGHT_GRAY);
@@ -40,7 +40,6 @@ public class Ventana extends Frame {
         lblTitulo.setBounds(30, 40, 300, 30);
         add(lblTitulo);
 
-        // Ajusté anchos (de 130 a 160) para que no se corten los textos
         lblCodigo = new Label("Código (Autogenerado):");
         lblCodigo.setBounds(30, 100, 160, 20);
         add(lblCodigo);
@@ -86,7 +85,6 @@ public class Ventana extends Frame {
     }
     
     private void configurarBuscador() {
-        // Moví el buscador hacia la derecha y le di más ancho para que se lea completo
         lblBuscar = new Label("Buscar (Nombre/Hab/Cód):");
         lblBuscar.setBounds(400, 60, 180, 20);
         add(lblBuscar);
@@ -132,7 +130,6 @@ public class Ventana extends Frame {
             @Override
             public void actionPerformed(ActionEvent e){
                 if(validarCampos()){
-                    // Obtenemos el valor seleccionado del ComboBox
                     String tipoSeleccionado = cmbTipoHabitacion.getSelectedItem().toString();
                     String nombre = txtNombre.getText().trim().toUpperCase();
                     int dias = Integer.parseInt(txtDiasHospedaje.getText().trim());
@@ -244,7 +241,6 @@ public class Ventana extends Frame {
             mostrarPopup("Campo Nombre es obligatorio");
             return false;
         }
-        // Eliminé la validación de Tipo de Habitación vacío porque el ComboBox siempre tiene algo seleccionado.
         
         if(txtNumeroHabitacion.getText().trim().isEmpty()){
             mostrarPopup("Campo Número Habitación es obligatorio");

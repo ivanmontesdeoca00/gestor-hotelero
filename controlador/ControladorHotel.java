@@ -9,7 +9,6 @@ public class ControladorHotel {
     
     private ArrayList<Huesped> listaHuespedes = new ArrayList<>();
 
-    // NUEVO MÉTODO: Define los precios de cada tipo de habitación
     public double obtenerTarifa(String tipoHabitacion) {
         switch (tipoHabitacion) {
             case "Básica": return 45000.0;
@@ -29,11 +28,9 @@ public class ControladorHotel {
         return "H-" + randomNum + "-" + System.currentTimeMillis(); 
     }
 
-    // MODIFICADO: Ahora calcula el costo basado en el tipo de habitación
     public void agregarRegistro(String nombre, String tipoHabitacion, String numHabitacion, int dias, DefaultTableModel modelo) {
         String codigo = generarCodigoUnico();
         
-        // Obtenemos la tarifa dinámica
         double tarifa = obtenerTarifa(tipoHabitacion);
         double costo = calcularCostoTotal(dias, tarifa);
         
@@ -43,7 +40,6 @@ public class ControladorHotel {
         modelo.addRow(new Object[]{codigo, nombre, tipoHabitacion, numHabitacion, dias, costo});
     }
 
-    // MODIFICADO: Recalcula el costo usando la tarifa correcta si se modifica
     public void modificarRegistro(int fila, String codigo, String nombre, String tipoHabitacion, String numHabitacion, int dias, DefaultTableModel modelo) {
         
         double tarifa = obtenerTarifa(tipoHabitacion);

@@ -17,8 +17,7 @@ public class Huesped {
         this.diasHospedaje = diasHospedaje;
         this.costoTotal = costoTotal;
     }
-
-    // Getters necesarios para la búsqueda y visualización
+    // getters para los valores de atributos
     public String getCodigo() { return codigo; }
     public String getNombre() { return nombre; }
     public String getNumeroHabitacion() { return numeroHabitacion; }
