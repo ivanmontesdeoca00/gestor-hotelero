@@ -20,7 +20,7 @@ public class ControladorHotelTest {
         controladorHotel = new ControladorHotel(); // Aca inicializo el controlador para cada cuadro del test .
         // el modeloTabla es un inicializador de la tabla que se va a usar para los test haciendo como 
         // si estuvieran los campos vacios y se van a ir llenando con los datos que agrego en cada test correspondiente.
-        modeloTabla = new DefaultTableModel(new String[]{"Código", "Nombre", "Tipo Hab", "N° Hab", "Días", "Costo Total"}, 0);
+        modeloTabla = new DefaultTableModel(new String[]{"Codigo", "Nombre", "Tipo Hab", "Num Hab", "Dias", "Costo Total"}, 0);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class ControladorHotelTest {
     }
 
     @Test
-    public void testConsultarRegistro() { //aca no hace aclarar mucho, es el testeo del metodo consulta 
+    public void testConsultarRegistro() { //es el testeo del metodo consulta con un preseteo en texto plano para poder tomarlo valido 
         controladorHotel.agregarRegistro("ivan", "SIMPLE", "101", 3, modeloTabla);
         
         TextField txtCodigo = new TextField();
@@ -43,7 +43,7 @@ public class ControladorHotelTest {
         TextField txtNumeroHabitacion = new TextField();
         TextField txtDiasHospedaje = new TextField();
         
-        // Aca voy a asumir que todo va en texto plano para ver si funciona bien
+        
         controladorHotel.consultarRegistro(0, modeloTabla, txtCodigo, txtNombre, txtTipoHabitacion, txtNumeroHabitacion, txtDiasHospedaje);
         
         assertEquals("ivan", txtNombre.getText());
@@ -56,7 +56,7 @@ public class ControladorHotelTest {
     public void testModificarRegistro() {
         controladorHotel.agregarRegistro("ivan", "SIMPLE", "101", 3, modeloTabla);
         
-        // aca genero el codigo del primer registro para poder modificarlo 
+        // aca genero el codigo del primer registro 
         String codigoGenerado = modeloTabla.getValueAt(0, 0).toString();
         
         // aca es cuando lo modificado es enviado 
