@@ -1,9 +1,9 @@
 package controlador;
 
-import modelo.Huesped;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
+import modelo.Huesped;
 
 public class ControladorHotel {
     
@@ -76,5 +76,15 @@ public class ControladorHotel {
             }
         }
         return null; 
+    }
+
+    public void consultarRegistro(int fila, DefaultTableModel modelo, java.awt.TextField txtCodigo, java.awt.TextField txtNombre, java.awt.TextField txtTipoHab, java.awt.TextField txtNumHab, java.awt.TextField txtDias) {
+        if (fila >= 0 && fila < modelo.getRowCount()) {
+            txtCodigo.setText(modelo.getValueAt(fila, 0).toString());
+            txtNombre.setText(modelo.getValueAt(fila, 1).toString());
+            txtTipoHab.setText(modelo.getValueAt(fila, 2).toString());
+            txtNumHab.setText(modelo.getValueAt(fila, 3).toString());
+            txtDias.setText(modelo.getValueAt(fila, 4).toString());
+        }
     }
 }
